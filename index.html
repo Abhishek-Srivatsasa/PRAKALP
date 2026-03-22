@@ -1,0 +1,224 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>PROJECT GARUDA | Autonomous Drone Defense</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link
+        href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Syne:wght@400;700;800&display=swap"
+        rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="tactical-theme">
+    <div class="tricolor-bar">
+        <div class="tricolor-segment saffron"></div>
+        <div class="tricolor-segment white"></div>
+        <div class="tricolor-segment green"></div>
+    </div>
+    <div class="scan-overlay"></div>
+    <div class="grid-overlay"></div>
+    <div class="side-decal side-decal-left"></div>
+    <div class="side-decal side-decal-right"></div>
+
+    <header class="hero">
+        <div class="container">
+            <div class="chakra-overlay"></div>
+            <div class="status-indicator">
+                <span class="pulse"></span>
+                <span class="status-text">SYSTEM STATUS: ACTIVE</span>
+            </div>
+            <h1 class="glitch" data-text="GARUDA">GARUDA</h1>
+            <p class="subtitle">Precision is the only permission we need.</p>
+            <div class="hero-actions">
+                <button class="btn btn-primary" onclick="scrollToSection('architecture')">VIEW ARCHITECTURE</button>
+                <button class="btn btn-danger kill-switch" id="killSwitch">INITIATE KILL-SWITCH</button>
+            </div>
+        </div>
+    </header>
+
+    <main>
+        <section id="architecture" class="section">
+            <div class="container">
+                <h2 class="section-title">4-LAYER ARCHITECTURE</h2>
+                <div class="architecture-grid">
+                    <div class="arch-card" data-layer="L1">
+                        <div class="arch-icon">01</div>
+                        <h3>RF Scout</h3>
+                        <p>ESP32 Sniffer specifically for 2.4GHz SSID patterns.</p>
+                        <ul class="specs-list">
+                            <li>Passive RF Detection</li>
+                            <li>Acoustic FFT (INMP441 Mics)</li>
+                        </ul>
+                    </div>
+                    <div class="arch-card" data-layer="L2">
+                        <div class="arch-icon">02</div>
+                        <h3>Neural Core</h3>
+                        <p>YOLOv11 running on a USB webcam.</p>
+                        <ul class="specs-list">
+                            <li>Real-time Classification</li>
+                            <li>Multi-Class Identification</li>
+                            <li>RTL-SDR DroneID Decoding</li>
+                        </ul>
+                    </div>
+                    <div class="arch-card" data-layer="L3">
+                        <div class="arch-icon">03</div>
+                        <h3>Ballistics Engine</h3>
+                        <p>LiDAR + Pan/Tilt / Basic velocity</p>
+                        <ul class="specs-list">
+                            <li>LiDAR Distance Ranging</li>
+                            <li>GPS Coordinate Transformation</li>
+                        </ul>
+                    </div>
+                    <div class="arch-card" data-layer="L4">
+                        <div class="arch-icon">04</div>
+                        <h3>The Kill-Chain</h3>
+                        <p>Targeted Jamming and Laser Dazzler neutralization.</p>
+                        <ul class="specs-list">
+                            <li>Autonomous Pursuit Drone (F450/Pixhawk).</li>
+                            <li>MAVLink/DroneKit Command</li>
+                            <li>ESP-NOW</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <section id="telemetry" class="section bg-dim">
+            <div class="container">
+                <div class="telemetry-dashboard">
+                    <div class="telemetry-header">
+                        <h2>LIVE TELEMETRY</h2>
+                        <div class="live-indicator">LIVE FEED</div>
+                    </div>
+                    <div class="dashboard-content">
+                        <div class="radar-container">
+                            <canvas id="radarCanvas"></canvas>
+                            <div class="radar-scan"></div>
+                        </div>
+                        <div class="stats-panel">
+                            <div class="stat-group">
+                                <label>TARGET COORDS</label>
+                                <div class="value" id="coords">LAT: 28.6139 | LON: 77.2090</div>
+                            </div>
+                            <div class="stat-group">
+                                <label>ALTITUDE</label>
+                                <div class="value" id="altitude">42.5m</div>
+                            </div>
+                            <div class="stat-group highlight">
+                                <label>WEAPON LOCK</label>
+                                <div class="value pulse-text">CONFIRMED</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section id="live_feed" class="section">
+            <div class="container text-center">
+                <h2 class="section-title">DIRECT NEURAL FEED</h2>
+                <div class="video-feed-container">
+                    <video id="webcam" autoplay playsinline muted></video>
+                    <div class="feed-overlay">
+                        <div class="corner-tl"></div>
+                        <div class="corner-tr"></div>
+                        <div class="corner-bl"></div>
+                        <div class="corner-br"></div>
+                        <div class="scanline"></div>
+                        <div class="feed-status">
+                            <span class="recording-dot"></span>
+                            REC: STREAMING_LIVE_01
+                        </div>
+                        <div class="feed-timestamp" id="feedTimestamp">2026-03-22 10:52:12</div>
+                    </div>
+                </div>
+                <div class="feed-controls">
+                    <button id="startFeed" class="btn btn-primary">INITIALIZE NEURAL LINK</button>
+                    <p class="feed-hint">Grant camera permission to view direct drone's-eye perspective.</p>
+                </div>
+            </div>
+        </section>
+
+        <section id="specs" class="section">
+            <div class="container">
+                <h2 class="section-title">TECHNICAL SPECIFICATIONS</h2>
+                <table class="specs-table">
+                    <thead>
+                        <tr>
+                            <th>COMPONENT</th>
+                            <th>HARDWARE</th>
+                            <th>SOFTWARE</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>Primary Compute</td>
+                            <td>GPU Enabled Laptop</td>
+                            <td>YOLOv11</td>
+                        </tr>
+                        <tr>
+                            <td>Motion Control</td>
+                            <td>MG996R Servos (x2)</td>
+                            <td>Serial (UART)</td>
+                        </tr>
+                        <tr>
+                            <td>Sensing Suite</td>
+                            <td>TF-Luna LiDAR / RTL-SDR / ESP32</td>
+                            <td>OpenDroneID</td>
+                        </tr>
+                        <tr>
+                            <td>Neutralization</td>
+                            <td>F450 Pursuit Drone / Pixhawk 2.4.8</td>
+                            <td>DroneKit / MAVLink / ESP-NOW</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="team" class="section bg-dim">
+            <div class="container">
+                <h2 class="section-title">ENGINEERING TEAM</h2>
+                <div class="team-grid">
+                    <div class="team-member">
+                        <div class="member-avatar">AS</div>
+                        <h4>Abhishek Srivatsasa</h4>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">SU</div>
+                        <h4>Shridhar Udayagiri</h4>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">PM</div>
+                        <h4>Priyanshu Mohanty</h4>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">AK</div>
+                        <h4>Aditya Sai</h4>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">AR</div>
+                        <h4>Advaith Reddy</h4>
+                    </div>
+                    <div class="team-member">
+                        <div class="member-avatar">MN</div>
+                        <h4>Nithish Madhav</h4>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2026 Project Garuda Defense Systems. Mission-Critical Protection.</p>
+        </div>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+
+</html>
