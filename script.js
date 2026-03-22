@@ -17,7 +17,7 @@ function drawRadar() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     
     // Draw concentric circles
-    ctx.strokeStyle = 'rgba(0, 212, 255, 0.1)';
+    ctx.strokeStyle = 'rgba(0, 0, 0, 0.1)';
     ctx.lineWidth = 1;
     for (let i = 1; i <= 5; i++) {
         ctx.beginPath();
@@ -156,12 +156,108 @@ drawRadar();
 updateTelemetry();
 updateTimestamp();
 
-// Add interactive effect to Arch cards
-document.querySelectorAll('.arch-card').forEach(card => {
-    card.addEventListener('mouseenter', () => {
-        card.style.borderColor = 'var(--acc-cyan)';
-    });
-    card.addEventListener('mouseleave', () => {
-        card.style.borderColor = 'var(--glass-border)';
-    });
+// Tricolor Particle Background (Antigravity Effect)
+const pCanvas = document.getElementById('particleCanvas');
+const pCtx = pCanvas.getContext('2d');
+let particles = [];
+let mouse = { x: null, y: null, radius: 150 };
+
+function initParticles() {
+    pCanvas.width = window.innerWidth;
+    pCanvas.height = window.innerHeight;
+    particles = [];
+    const numberOfParticles = (pCanvas.width * pCanvas.height) / 9000;
+    for (let i = 0; i < numberOfParticles; i++) {
+        particles.push(new Particle());
+    }
+}
+
+class Particle {
+    constructor() {
+        this.x = Math.random() * pCanvas.width;
+        this.y = Math.random() * pCanvas.height;
+        this.size = Math.random() * 2 + 1;
+        this.baseX = this.x;
+        this.baseY = this.y;
+        this.density = (Math.random() * 30) + 1;
+        
+        const colors = ['#FF9933', '#CCCCCC', '#138808']; // Saffron, Gray, Green
+        this.color = colors[Math.floor(Math.random() * colors.length)];
+        
+        this.vx = (Math.random() - 0.5) * 0.5;
+        this.vy = (Math.random() - 0.5) * 0.5;
+    }
+
+    draw() {
+        pCtx.fillStyle = this.color;
+        pCtx.beginPath();
+        pCtx.arc(this.x, this.y, this.size, 0, Math.PI * 2);
+        pCtx.closePath();
+        pCtx.fill();
+    }
+
+    update() {
+        // Floating drift
+        this.x += this.vx;
+        this.y += this.vy;
+
+        // Wrap around edges
+        if (this.x < 0) this.x = pCanvas.width;
+        if (this.x > pCanvas.width) this.x = 0;
+        if (this.y < 0) this.y = pCanvas.height;
+        if (this.y > pCanvas.height) this.y = 0;
+
+        // Mouse Repulsion
+        if (mouse.x != null) {
+            let dx = mouse.x - this.x;
+            let dy = mouse.y - this.y;
+            let distance = Math.sqrt(dx * dx + dy * dy);
+            let forceDirectionX = dx / distance;
+            let forceDirectionY = dy / distance;
+            let maxDistance = mouse.radius;
+            let force = (maxDistance - distance) / maxDistance;
+            let directionX = forceDirectionX * force * this.density;
+            let directionY = forceDirectionY * force * this.density;
+
+            if (distance < mouse.radius) {
+                this.x -= directionX;
+                this.y -= directionY;
+            }
+        }
+    }
+}
+
+function animateParticles() {
+    pCtx.clearRect(0, 0, pCanvas.width, pCanvas.height);
+    for (let i = 0; i < particles.length; i++) {
+        particles[i].draw();
+        particles[i].update();
+    }
+    requestAnimationFrame(animateParticles);
+}
+
+window.addEventListener('mousemove', (event) => {
+    mouse.x = event.x;
+    mouse.y = event.y;
+});
+
+window.addEventListener('mouseout', () => {
+    mouse.x = null;
+    mouse.y = null;
+});
+
+window.addEventListener('resize', () => {
+    initParticles();
+});
+
+initParticles();
+animateParticles();
+
+// Interactive Chakra Rotation
+window.addEventListener('scroll', () => {
+    const chakra = document.querySelector('.chakra-overlay');
+    if (chakra) {
+        const rotation = window.scrollY * 0.2; // Adjust speed multiplier
+        chakra.style.transform = `translateY(-50%) rotate(${rotation}deg)`;
+    }
 });

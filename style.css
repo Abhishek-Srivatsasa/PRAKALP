@@ -1,16 +1,17 @@
 :root {
-    --bg-dark: #080C10;
-    --acc-green: #10B981;
-    --acc-cyan: #00D4FF;
-    --acc-red: #EF4444;
-    --txt-main: #FFFFFF;
-    --txt-dim: rgba(255, 255, 255, 0.6);
-    --glass-bg: rgba(255, 255, 255, 0.03);
-    --glass-border: rgba(255, 255, 255, 0.06);
+    --bg-light: #F8FAFC;
+    --bg-alt: #EDF2F7;
+    --acc-green: #059669;
+    --acc-cyan: #0EA5E9;
+    --acc-red: #DC2626;
+    --txt-main: #1A202C;
+    --txt-dim: #4A5568;
+    --glass-bg: rgba(0, 0, 0, 0.03);
+    --glass-border: rgba(0, 0, 0, 0.1);
     --font-heading: 'Syne', sans-serif;
     --font-mono: 'Space Mono', monospace;
     --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-    
+
     /* Indian Flag Colors */
     --india-saffron: #FF9933;
     --india-white: #FFFFFF;
@@ -25,13 +26,7 @@
 }
 
 body {
-    background-color: var(--bg-dark);
-    background-image: 
-        linear-gradient(rgba(8, 12, 16, 0.8), rgba(8, 12, 16, 0.8)),
-        url('garuda_setup_spotlight_1774159748682.png');
-    background-size: cover;
-    background-position: center;
-    background-attachment: fixed;
+    background-color: var(--bg-light);
     color: var(--txt-main);
     font-family: var(--font-mono);
     line-height: 1.6;
@@ -44,7 +39,7 @@ body {
 }
 
 ::-webkit-scrollbar-track {
-    background: var(--bg-dark);
+    background: var(--bg-light);
 }
 
 ::-webkit-scrollbar-thumb {
@@ -56,7 +51,10 @@ body {
     background: var(--india-white);
 }
 
-h1, h2, h3, h4 {
+h1,
+h2,
+h3,
+h4 {
     font-family: var(--font-heading);
     text-transform: uppercase;
     font-weight: 800;
@@ -84,9 +82,17 @@ h1, h2, h3, h4 {
     height: 100%;
 }
 
-.saffron { background-color: var(--india-saffron); }
-.white { background-color: var(--india-white); }
-.green { background-color: var(--india-green); }
+.saffron {
+    background-color: var(--india-saffron);
+}
+
+.white {
+    background-color: var(--india-white);
+}
+
+.green {
+    background-color: var(--india-green);
+}
 
 /* Side Decals */
 .side-decal {
@@ -146,12 +152,21 @@ h1, h2, h3, h4 {
     position: absolute;
     width: 100%;
     height: 100%;
-    background: repeating-conic-gradient(
-        from 0deg,
-        transparent 0deg 7.5deg,
-        var(--india-blue) 7.5deg 15deg
-    );
+    background: repeating-conic-gradient(from 0deg,
+            transparent 0deg 7.5deg,
+            var(--india-blue) 7.5deg 15deg);
     border-radius: 50%;
+}
+
+#particleCanvas {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+    pointer-events: none;
+    opacity: 0.6;
 }
 
 /* Overlays */
@@ -161,9 +176,9 @@ h1, h2, h3, h4 {
     left: 0;
     width: 100%;
     height: 100%;
-    background-image: 
-        linear-gradient(rgba(255,255,255,0.02) 1px, transparent 1px),
-        linear-gradient(90deg, rgba(255,255,255,0.02) 1px, transparent 1px);
+    background-image:
+        linear-gradient(rgba(0, 0, 0, 0.05) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 0, 0, 0.05) 1px, transparent 1px);
     background-size: 40px 40px;
     pointer-events: none;
     z-index: 10;
@@ -175,7 +190,7 @@ h1, h2, h3, h4 {
     left: 0;
     width: 100%;
     height: 100%;
-    background: linear-gradient(to bottom, transparent, rgba(16, 185, 129, 0.05), transparent);
+    background: linear-gradient(to bottom, transparent, rgba(14, 165, 233, 0.02), transparent);
     background-size: 100% 200%;
     animation: scan 8s linear infinite;
     pointer-events: none;
@@ -183,8 +198,13 @@ h1, h2, h3, h4 {
 }
 
 @keyframes scan {
-    from { background-position: 0 -100%; }
-    to { background-position: 0 100%; }
+    from {
+        background-position: 0 -100%;
+    }
+
+    to {
+        background-position: 0 100%;
+    }
 }
 
 /* Sections */
@@ -193,7 +213,7 @@ h1, h2, h3, h4 {
 }
 
 .bg-dim {
-    background-color: rgba(255,255,255,0.01);
+    background-color: var(--bg-alt);
 }
 
 .section-title {
@@ -201,7 +221,7 @@ h1, h2, h3, h4 {
     margin-bottom: 3rem;
     letter-spacing: 4px;
     border-left: 6px solid;
-    border-image: linear-gradient(to bottom, var(--india-saffron), var(--india-white), var(--india-green)) 1;
+    border-image: linear-gradient(to bottom, var(--india-saffron), #ccc, var(--india-green)) 1;
     padding-left: 1.5rem;
 }
 
@@ -212,7 +232,7 @@ h1, h2, h3, h4 {
     align-items: center;
     position: relative;
     overflow: hidden;
-    background: radial-gradient(circle at bottom, rgba(255, 153, 51, 0.05), transparent 70%);
+    background: radial-gradient(circle at bottom, rgba(14, 165, 233, 0.05), transparent 70%);
 }
 
 .status-indicator {
@@ -235,14 +255,37 @@ h1, h2, h3, h4 {
 }
 
 @keyframes pulse {
-    0% { transform: scale(1); opacity: 1; background-color: var(--india-saffron); box-shadow: 0 0 10px var(--india-saffron); }
-    33% { transform: scale(1.5); opacity: 0.5; background-color: var(--india-white); box-shadow: 0 0 10px var(--india-white); }
-    66% { transform: scale(1); opacity: 1; background-color: var(--india-green); box-shadow: 0 0 10px var(--india-green); }
-    100% { transform: scale(1); opacity: 1; background-color: var(--india-saffron); box-shadow: 0 0 10px var(--india-saffron); }
+    0% {
+        transform: scale(1);
+        opacity: 1;
+        background-color: var(--india-saffron);
+        box-shadow: 0 0 10px var(--india-saffron);
+    }
+
+    33% {
+        transform: scale(1.5);
+        opacity: 0.5;
+        background-color: #777;
+        box-shadow: 0 0 10px #777;
+    }
+
+    66% {
+        transform: scale(1);
+        opacity: 1;
+        background-color: var(--india-green);
+        box-shadow: 0 0 10px var(--india-green);
+    }
+
+    100% {
+        transform: scale(1);
+        opacity: 1;
+        background-color: var(--india-saffron);
+        box-shadow: 0 0 10px var(--india-saffron);
+    }
 }
 
 .status-indicator .status-text {
-    background: linear-gradient(90deg, var(--india-saffron), var(--india-white), var(--india-green));
+    background: linear-gradient(90deg, var(--india-saffron), var(--txt-main), var(--india-green));
     background-clip: text;
     -webkit-background-clip: text;
     -webkit-text-fill-color: transparent;
@@ -255,8 +298,8 @@ h1.glitch {
     margin-bottom: 1rem;
     position: relative;
     color: var(--txt-main);
-    text-shadow: 
-        3px 0 var(--india-saffron), 
+    text-shadow:
+        3px 0 var(--india-saffron),
         -3px 0 var(--india-green);
 }
 
@@ -290,7 +333,7 @@ h1.glitch {
 
 .btn:hover {
     background: var(--txt-main);
-    color: var(--bg-dark);
+    color: white;
 }
 
 .btn-primary:hover {
@@ -317,7 +360,8 @@ h1.glitch {
 }
 
 .arch-card {
-    background: var(--glass-bg);
+    background: white;
+    box-shadow: 0 10px 30px rgba(0,0,0,0.05);
     border: 1px solid var(--glass-border);
     padding: 2.5rem;
     transition: var(--transition);
@@ -338,7 +382,8 @@ h1.glitch {
 .arch-card:hover {
     border-color: var(--acc-cyan);
     transform: translateY(-5px);
-    background: rgba(255, 255, 255, 0.05);
+    background: white;
+    box-shadow: 0 15px 40px rgba(0,0,0,0.1);
 }
 
 .arch-card::before {
@@ -386,11 +431,11 @@ h1.glitch {
 
 /* Telemetry Dashboard */
 .telemetry-dashboard {
-    background: rgba(0, 0, 0, 0.5);
+    background: white;
     border: 1px solid var(--acc-cyan);
     padding: 2rem;
     border-radius: 4px;
-    box-shadow: 0 0 30px rgba(0, 212, 255, 0.1);
+    box-shadow: 0 10px 40px rgba(0, 165, 233, 0.1);
 }
 
 .telemetry-header {
@@ -427,9 +472,9 @@ h1.glitch {
 
 .radar-container {
     position: relative;
-    background: #000;
+    background: #f1f5f9;
     aspect-ratio: 16/9;
-    border: 1px solid rgba(255, 255, 255, 0.1);
+    border: 1px solid rgba(0, 0, 0, 0.05);
     overflow: hidden;
 }
 
@@ -444,21 +489,24 @@ h1.glitch {
     left: 50%;
     width: 200%;
     height: 200%;
-    background: conic-gradient(
-        from 0deg,
-        rgba(255, 153, 51, 0.4) 0deg,
-        rgba(255, 255, 255, 0.4) 15deg,
-        rgba(19, 136, 8, 0.4) 30deg,
-        transparent 90deg
-    );
+    background: conic-gradient(from 0deg,
+            rgba(255, 153, 51, 0.4) 0deg,
+            rgba(255, 255, 255, 0.4) 15deg,
+            rgba(19, 136, 8, 0.4) 30deg,
+            transparent 90deg);
     transform: translate(-50%, -50%);
     animation: rotate 4s linear infinite;
     pointer-events: none;
 }
 
 @keyframes rotate {
-    from { transform: translate(-50%, -50%) rotate(0deg); }
-    to { transform: translate(-50%, -50%) rotate(360deg); }
+    from {
+        transform: translate(-50%, -50%) rotate(0deg);
+    }
+
+    to {
+        transform: translate(-50%, -50%) rotate(360deg);
+    }
 }
 
 .stats-panel {
@@ -494,8 +542,17 @@ h1.glitch {
 }
 
 @keyframes pulseText {
-    0%, 100% { opacity: 1; color: var(--acc-green); }
-    50% { opacity: 0.5; color: white; }
+
+    0%,
+    100% {
+        opacity: 1;
+        color: var(--acc-green);
+    }
+
+    50% {
+        opacity: 0.5;
+        color: white;
+    }
 }
 
 /* Specs Table */
@@ -592,7 +649,7 @@ body.red-alert {
 }
 
 body.red-alert .grid-overlay {
-    background-image: 
+    background-image:
         linear-gradient(rgba(239, 68, 68, 0.1) 1px, transparent 1px),
         linear-gradient(90deg, rgba(239, 68, 68, 0.1) 1px, transparent 1px);
 }
@@ -602,17 +659,49 @@ body.red-alert .scan-overlay {
 }
 
 @keyframes shake {
-    0% { transform: translate(1px, 1px) rotate(0deg); }
-    10% { transform: translate(-1px, -2px) rotate(-1deg); }
-    20% { transform: translate(-3px, 0px) rotate(1deg); }
-    30% { transform: translate(3px, 2px) rotate(0deg); }
-    40% { transform: translate(1px, -1px) rotate(1deg); }
-    50% { transform: translate(-1px, 2px) rotate(-1deg); }
-    60% { transform: translate(-3px, 1px) rotate(0deg); }
-    70% { transform: translate(3px, 1px) rotate(-1deg); }
-    80% { transform: translate(-1px, -1px) rotate(1deg); }
-    90% { transform: translate(1px, 2px) rotate(0deg); }
-    100% { transform: translate(1px, -2px) rotate(-1deg); }
+    0% {
+        transform: translate(1px, 1px) rotate(0deg);
+    }
+
+    10% {
+        transform: translate(-1px, -2px) rotate(-1deg);
+    }
+
+    20% {
+        transform: translate(-3px, 0px) rotate(1deg);
+    }
+
+    30% {
+        transform: translate(3px, 2px) rotate(0deg);
+    }
+
+    40% {
+        transform: translate(1px, -1px) rotate(1deg);
+    }
+
+    50% {
+        transform: translate(-1px, 2px) rotate(-1deg);
+    }
+
+    60% {
+        transform: translate(-3px, 1px) rotate(0deg);
+    }
+
+    70% {
+        transform: translate(3px, 1px) rotate(-1deg);
+    }
+
+    80% {
+        transform: translate(-1px, -1px) rotate(1deg);
+    }
+
+    90% {
+        transform: translate(1px, 2px) rotate(0deg);
+    }
+
+    100% {
+        transform: translate(1px, -2px) rotate(-1deg);
+    }
 }
 
 /* Live Feed Section */
@@ -625,10 +714,10 @@ body.red-alert .scan-overlay {
     max-width: 900px;
     margin: 3rem auto;
     border: 1px solid var(--glass-border);
-    background: #000;
+    background: #f1f5f9;
     aspect-ratio: 16 / 9;
     overflow: hidden;
-    box-shadow: 0 0 50px rgba(0, 0, 0, 0.5);
+    box-shadow: 0 10px 40px rgba(0, 0, 0, 0.05);
 }
 
 #webcam {
@@ -652,7 +741,10 @@ body.red-alert .scan-overlay {
 }
 
 /* HUD Corners */
-.corner-tl, .corner-tr, .corner-bl, .corner-br {
+.corner-tl,
+.corner-tr,
+.corner-bl,
+.corner-br {
     position: absolute;
     width: 30px;
     height: 30px;
@@ -660,10 +752,33 @@ body.red-alert .scan-overlay {
     opacity: 0.5;
 }
 
-.corner-tl { top: 20px; left: 20px; border-right: 0; border-bottom: 0; }
-.corner-tr { top: 20px; right: 20px; border-left: 0; border-bottom: 0; }
-.corner-bl { bottom: 20px; left: 20px; border-right: 0; border-top: 0; }
-.corner-br { bottom: 20px; right: 20px; border-left: 0; border-top: 0; }
+.corner-tl {
+    top: 20px;
+    left: 20px;
+    border-right: 0;
+    border-bottom: 0;
+}
+
+.corner-tr {
+    top: 20px;
+    right: 20px;
+    border-left: 0;
+    border-bottom: 0;
+}
+
+.corner-bl {
+    bottom: 20px;
+    left: 20px;
+    border-right: 0;
+    border-top: 0;
+}
+
+.corner-br {
+    bottom: 20px;
+    right: 20px;
+    border-left: 0;
+    border-top: 0;
+}
 
 .scanline {
     position: absolute;
@@ -677,8 +792,13 @@ body.red-alert .scan-overlay {
 }
 
 @keyframes scanline {
-    0% { top: 0; }
-    100% { top: 100%; }
+    0% {
+        top: 0;
+    }
+
+    100% {
+        top: 100%;
+    }
 }
 
 .feed-status {
@@ -738,12 +858,12 @@ body.red-alert .scan-overlay {
     .dashboard-content {
         grid-template-columns: 1fr;
     }
-    
+
     .section-title {
         font-size: 1.8rem;
         margin-bottom: 2rem;
     }
-    
+
     h1.glitch {
         font-size: 3.5rem;
     }
@@ -810,7 +930,8 @@ body.red-alert .scan-overlay {
         font-size: 1rem;
     }
 
-    .specs-table th, .specs-table td {
+    .specs-table th,
+    .specs-table td {
         padding: 1rem 0.5rem;
         font-size: 0.8rem;
     }
@@ -821,15 +942,26 @@ body.red-alert .scan-overlay {
         font-size: 1rem;
     }
 
-    .feed-status, .feed-timestamp {
+    .feed-status,
+    .feed-timestamp {
         font-size: 0.6rem;
         padding: 0.15rem 0.35rem;
     }
 
-    .feed-status { top: 15px; left: 15px; }
-    .feed-timestamp { bottom: 15px; right: 15px; }
-    
-    .corner-tl, .corner-tr, .corner-bl, .corner-br {
+    .feed-status {
+        top: 15px;
+        left: 15px;
+    }
+
+    .feed-timestamp {
+        bottom: 15px;
+        right: 15px;
+    }
+
+    .corner-tl,
+    .corner-tr,
+    .corner-bl,
+    .corner-br {
         width: 20px;
         height: 20px;
     }
