@@ -1,0 +1,9 @@
+train: archive/drone_dataset_yolo/dataset_txt
+val: archive/drone_dataset_yolo/dataset_txt
+
+# number of classes
+nc: 1
+
+# class names
+names: ['drone']
+    
