@@ -99,38 +99,27 @@ function scrollToSection(id) {
 const webcam = document.getElementById('webcam');
 const startFeedBtn = document.getElementById('startFeed');
 const feedTimestamp = document.getElementById('feedTimestamp');
-let stream = null;
+let updateInterval = null;
 
 async function initCamera() {
-    try {
-        if (!stream) {
-            stream = await navigator.mediaDevices.getUserMedia({ 
-                video: { 
-                    width: { ideal: 1280 },
-                    height: { ideal: 720 },
-                    facingMode: "user"
-                }, 
-                audio: false 
-            });
-            webcam.srcObject = stream;
-            startFeedBtn.innerText = 'TERMINATE LINK';
-            startFeedBtn.classList.remove('btn-primary');
-            startFeedBtn.classList.add('btn-danger');
-            console.log('NEURAL LINK ESTABLISHED');
-        } else {
-            stopCamera();
-        }
-    } catch (err) {
-        console.error("Camera access denied:", err);
-        alert("CRITICAL ERROR: Unable to establish neural link. Please check hardware permissions.");
+    if (!updateInterval) {
+        updateInterval = setInterval(() => {
+            const timestamp = new Date().getTime();
+            webcam.src = "latest_detection.jpg?t=" + timestamp;
+        }, 1000);
+        startFeedBtn.innerText = 'TERMINATE LINK';
+        startFeedBtn.classList.remove('btn-primary');
+        startFeedBtn.classList.add('btn-danger');
+        console.log('NEURAL LINK ESTABLISHED');
+    } else {
+        stopCamera();
     }
 }
 
 function stopCamera() {
-    if (stream) {
-        stream.getTracks().forEach(track => track.stop());
-        webcam.srcObject = null;
-        stream = null;
+    if (updateInterval) {
+        clearInterval(updateInterval);
+        updateInterval = null;
         startFeedBtn.innerText = 'INITIALIZE NEURAL LINK';
         startFeedBtn.classList.remove('btn-danger');
         startFeedBtn.classList.add('btn-primary');

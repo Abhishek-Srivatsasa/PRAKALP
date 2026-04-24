@@ -6,10 +6,10 @@ import os
 model = YOLO('best.pt')
 
 # 2. Specify the video path (replace with your actual video name)
-video_path = 'test_video.mp4' # or test_video(1/2).mp4
+video_path = 'Gemini.mp4' # or test_video(1/2).mp4
 
 # 3. Run prediction with stream=True for memory efficiency
-results = model.predict(source="http://192.168.29.131:8080/video", show=True, conf=0.5, stream=True)
+results = model.predict(source=video_path, show=True, conf=0.5, stream=True)
 
 # Create Detections folder if it doesn't exist
 os.makedirs("Detections", exist_ok=True)

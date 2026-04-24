@@ -1,48 +1,62 @@
-from ultralytics import YOLO
-import time 
-import os
 import cv2
+from ultralytics import YOLO as yl
+import os 
+import time
 
-# 1. Load your fine-tuned model
-model = YOLO('best.pt')
+try :
+	model = yl('best.onnx', task = 'detect')
+	print("ONNX loaded for CPU")
+except Exception as e :
+	print(f"Error: Couldn't find the onnx module")
+	exit()
 
-# 2. Run prediction using the default webcam (source=0)
-# stream=True is essential for live camera feeds
-results = model.predict(source="http://192.168.29.131:8080/video", conf=0.8, stream=True) 
-# To use the IP Webcam app from phone to laptop -- "http://192.168.29.131:8080/video"
-# TO use the Laptop camera put the source = 0 
+SAVE_DIR = "Detections"
+os.makedirs(SAVE_DIR, exist_ok=True)
 
-# Create Detections folder if it doesn't exist
-os.makedirs("Detections", exist_ok=True)
+cap = cv2.VideoCapture(0)
+cap.set(cv2.CAP_PROP_BUFFERSIZE, 1)
 
-last_capture_time = 0
+cap.set(cv2.CAP_PROP_FRAME_WIDTH, 640)
+cap.set(cv2.CAP_PROP_FRAME_HEIGHT,480)
 
-for r in results:
-    # Grab the frame with the AI's boxes drawn on it
-    annotated_frame = r.plot()
-    # Display it in a custom window
-    cv2.imshow("Turret Vision", annotated_frame)
+last_save_time = 0 
+prev_frame_time = 0
+print("TURRET ACTIVE ::::::: ")
 
-    # Loop through detected drones to get their exact center coordinates
-    for box in r.boxes:
-        # xywh gives us a list of [x_center, y_center, width, height]
-        x_center, y_center, width, height = box.xywh[0]
-        
-        x, y = int(x_center), int(y_center)
-        print(f"🎯 Target Locked! Aiming Turret at X:{x} Y:{y}")
+while True :
+	success, frame = cap.read() 
+	if not success:
+		break
 
-    if len(r.boxes) > 0 :
-        current_time = time.time()
-        # Check if 5 seconds have passed since the last photo
-        if current_time - last_capture_time >= 5:
-            f_name = f"detected_Webcam_file_{int(current_time)}.jpg"
-            save_path = os.path.join("Detections", f_name)
-            r.save(filename=save_path) 
-            print(f"📸 Snapshot saved of webcam file: {save_path}")
-            
-            # Reset the stopwatch!
-            last_capture_time = current_time
+	results = model(frame, imgsz=320, conf=0.5, verbose=False, device="cpu")
+	for r in results:
+		annotated_frame = r.plot() 
+		
+		new_frame_time = time.time()
+		fps = 1 / (new_frame_time - prev_frame_time) if prev_frame_time > 0 else 0
+		prev_frame_time = new_frame_time
+		
+		cv2.putText(annotated_frame, f"FPS: {int(fps)}", (10, 30), cv2.FONT_HERSHEY_SIMPLEX, 1, (0, 255, 0), 2)
+		
+		cv2.imshow("GARUDA TURRET",annotated_frame)
+		
+		if len(r.boxes) >0 :
+			current_time = time.time()
+			if current_time - last_save_time > 3:
+				timestamp = int(current_time)
 
-    # Press 'q' to close the window safely
-    if cv2.waitKey(1) & 0xFF == ord('q'):
-        break
+				file_path = os.path.join(SAVE_DIR, f"Drone_detected_{timestamp}.jpg")
+				cv2.imwrite(file_path, annotated_frame)
+				
+				# Mirror to the website
+				website_dir = os.path.join(os.path.dirname(os.path.abspath(__file__)), 'PRAKALP_WHITE_BG')
+				os.makedirs(website_dir, exist_ok=True)
+				cv2.imwrite(os.path.join(website_dir, 'latest_detection.jpg'), annotated_frame)
+
+				print(f"TARGET IMAGE CAPTURED : {file_path}")
+				last_save_time = current_time
+	if cv2.waitKey(1) & 0xFF == ord('q') :
+		break
+cap.release()
+cv2.destroyAllWindows()
+print("GARUDA STOPPED")
